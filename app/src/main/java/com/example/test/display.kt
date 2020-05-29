@@ -48,7 +48,6 @@ class display : AppCompatActivity() {
     var t1: TextToSpeech? = null
 
 
-
     /** Preallocated buffers for storing image data. */
     private val imageBuffer = IntArray(DIM_IMG_SIZE_X * DIM_IMG_SIZE_Y)
 
@@ -70,7 +69,7 @@ class display : AppCompatActivity() {
     //    val outputDims = arrayOf(DIM_BATCH_SIZE, labelList.size)
     private val modelInputOutputOptions = FirebaseModelInputOutputOptions.Builder()
             .setInputFormat(0, FirebaseModelDataType.BYTE, intArrayOf(1, 224, 224, 3))
-            .setOutputFormat(0, FirebaseModelDataType.BYTE, intArrayOf(1,1001) )
+            .setOutputFormat(0, FirebaseModelDataType.BYTE, intArrayOf(1, 1001))
             .build()
 
     /** Firebase model interpreter used for the local model from assets */
@@ -128,6 +127,7 @@ class display : AppCompatActivity() {
         startActivity(intent)
         //}
     }
+
     private fun runModelInference() = selectedImage?.let { image ->
 
         // Create input data.
@@ -147,7 +147,7 @@ class display : AppCompatActivity() {
                 graphic_overlay.add(LabelGraphic(graphic_overlay, topLabels))
                 val toSpeak: String = "You are looking at ".plus(topLabels[0]).plus(" and ").plus(topLabels[1]).plus(" and ").plus(topLabels[2])
 //                val toSpeak: String = "You are looking at".plus(topLabels[0])
-                Log.d(TAG,topLabels[0])
+                Log.d(TAG, topLabels[0])
                 t1!!.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null)
                 topLabels
             }

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Locale;
@@ -32,10 +33,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     Camera camera;
     FrameLayout framelayout;
     ShowCamera showCamera;
-    display d=new display();
+    display d = new display();
     TextToSpeech t1;
     private static final String TAG = MainActivity.class.getSimpleName();
-
 
 
     @Override
@@ -44,16 +44,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         setContentView(R.layout.activity_main);
 
-        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+        t1 = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != TextToSpeech.ERROR) {
+                if (status != TextToSpeech.ERROR) {
                     t1.setLanguage(Locale.UK);
                 }
             }
         });
-
-
 
 
         gestureDetector = new GestureDetector(MainActivity.this, MainActivity.this);
@@ -61,16 +59,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         //   Text to speech initialization
 
 
-
-
-        framelayout=(FrameLayout)findViewById(R.id.frameLayout);
+        framelayout = (FrameLayout) findViewById(R.id.frameLayout);
 
         //open
-        camera= Camera.open();
+        camera = Camera.open();
 
 
-
-        showCamera=new ShowCamera(this,camera);
+        showCamera = new ShowCamera(this, camera);
         framelayout.addView(showCamera);
 
 
@@ -82,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }, 1000);
 
     }
-    public void performClick(){
+
+    public void performClick() {
         toSpeak = "Identification mode";
         t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
 
@@ -92,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
 
-        View v=framelayout.getRootView();
+        View v = framelayout.getRootView();
         captureImage(v);
         return false;
     }
@@ -107,28 +103,22 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
 
-    Camera.PictureCallback mPictureCallback=new Camera.PictureCallback() {
+    Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
-        public void onPictureTaken(byte[] bytes, Camera camera)
-        {
-            File picture_file=getOutputMediaFile();
-            if(picture_file==null)
-            {
+        public void onPictureTaken(byte[] bytes, Camera camera) {
+            File picture_file = getOutputMediaFile();
+            if (picture_file == null) {
                 return;
-            }
-            else
-            {
-                try
-                {
-                    FileOutputStream fos=new FileOutputStream(picture_file);
+            } else {
+                try {
+                    FileOutputStream fos = new FileOutputStream(picture_file);
                     fos.write(bytes);
                     fos.close();
 
-                    Intent i=new Intent(MainActivity.this,display.class);
+                    Intent i = new Intent(MainActivity.this, display.class);
                     startActivity(i);
                     camera.startPreview();
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -136,35 +126,29 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
     };
 
-    private File getOutputMediaFile()
-    {
-        String state= Environment.getExternalStorageState();
-        if(!state.equals(Environment.MEDIA_MOUNTED))
-        {
+    private File getOutputMediaFile() {
+        String state = Environment.getExternalStorageState();
+        if (!state.equals(Environment.MEDIA_MOUNTED)) {
             return null;
-        }
-        else
-        {
-            File folder_gui=new File(Environment.getExternalStorageDirectory()+File.separator+"GUI");
-            if(!folder_gui.exists())
-            {
+        } else {
+            File folder_gui = new File(Environment.getExternalStorageDirectory() + File.separator + "GUI");
+            if (!folder_gui.exists()) {
                 folder_gui.mkdirs();
             }
-            File outputFile=new File(folder_gui,"temp.jpg");
+            File outputFile = new File(folder_gui, "temp.jpg");
             return outputFile;
         }
     }
 
-    public void captureImage(View v)
-    {
-        if(camera!=null)
-        {
-            camera.takePicture(null,null,mPictureCallback);
+
+    public void captureImage(View v) {
+        if (camera != null) {
+            camera.takePicture(null, null, mPictureCallback);
         }
     }
 
 
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
         this.gestureDetector.onTouchEvent(event);
         // Be sure to call the superclass implementation
         return super.onTouchEvent(event);

@@ -45,9 +45,9 @@ import java.util.Set;
 public class GraphicOverlay extends View {
     private final Object lock = new Object();
     private int previewWidth;
-    private float widthScaleFactor =1.0f;
+    private float widthScaleFactor = 1.0f;
     private int previewHeight;
-    private float heightScaleFactor =1.0f;
+    private float heightScaleFactor = 1.0f;
     private int facing = CameraCharacteristics.LENS_FACING_BACK;
     private Set<Graphic> graphics = new HashSet<>();
 
